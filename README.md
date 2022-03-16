@@ -19,11 +19,11 @@ This addon is available on the Workshop [here](https://steamcommunity.com/shared
 + Configurable (`guthscpbase` in the console)
 
 ## Supported Maps
-+ [gm_site19](https://steamcommunity.com/sharedfiles/filedetails/?id=290599102)
-+ [rp_site65](https://steamcommunity.com/sharedfiles/filedetails/?id=1788306202)
-+ [rp_site27_work](https://steamcommunity.com/sharedfiles/filedetails/?id=2413675625)
-+ [rp_site10](https://steamcommunity.com/sharedfiles/filedetails/?id=2163851948)
-+ [rp_zone_tsade_v1f_fr](https://steamcommunity.com/sharedfiles/filedetails/?id=2263738446)
++ [gm_site19](https://steamcommunity.com/sharedfiles/filedetails/?id=290599102) ─ *23th June 2020*
++ [rp_site65](https://steamcommunity.com/sharedfiles/filedetails/?id=1788306202) ─ *23th June 2020*
++ [rp_site27_v1b](https://steamcommunity.com/sharedfiles/filedetails/?id=2413675625) ─ *1th April 2021*
++ [rp_site10](https://steamcommunity.com/sharedfiles/filedetails/?id=2163851948) ─ *7th May 2021*
++ [rp_zone_tsade_v1f_fr](https://steamcommunity.com/sharedfiles/filedetails/?id=2263738446) ─ *22th June 2021*
 + [rp_zone_tsade_v1f_us](https://steamcommunity.com/sharedfiles/filedetails/?id=2263738446) (with use of forcemap to 'rp_zone_tsade_v1f_fr')
 
 ## Convars
@@ -41,6 +41,8 @@ Be sure to have installed [[SCP] Guthen's Addons Base](https://steamcommunity.co
 ### "Could not connect to map database!"
 This message appears on the **S-NAV Ultimate** when the current map does not have an assigned minimap. 
 
-Two ways, either you create one yourself and put it in `materials/guth_scp/snav/MAP_NAME.png` or you ask me to make one. 
+If the map you are using is equivalent with one of the **Supported Maps**, then use the server convar `guthscpsnav_forcemap` (see above) to use a specific minimap.
+
+Otherwise, there are two ways : either you create one yourself (with use of `guthscpsnav_generate` and a digital software) and put it in `materials/guth_scp/snav/MAP_NAME.png` or you ask me to make one. 
 
 ***Enjoy !***
