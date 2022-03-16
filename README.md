@@ -29,11 +29,6 @@ This addon is available on the Workshop [here](https://steamcommunity.com/shared
 ## Convars
 + `guthscpsnav_forcemap <MAP_NAME>`: *Server*; Force a specific minimap to be use instead of current map's image (see the list above). Default: ""
 
-## Legal Terms
-This addon is licensed under [Creative Commons Sharealike 3.0](https://creativecommons.org/licenses/by-sa/3.0/) and is based on content of [SCP Foundation](http://scp-wiki.wikidot.com/) and [SCP:Containment Breach](https://www.scpcbgame.com/).
-
-If you create something derived from this, please credit me (you can also tell me about what you've done).
-
 ## Known Issues
 ### "The addon doesn't work!"
 Be sure to have installed [[SCP] Guthen's Addons Base](https://steamcommunity.com/sharedfiles/filedetails/?id=2139692777) on your server. Verify that you can open the configuration menu with `guthscpbase` in your game console.
@@ -44,5 +39,10 @@ This message appears on the **S-NAV Ultimate** when the current map does not hav
 If the map you are using is equivalent with one of the **Supported Maps**, then use the server convar `guthscpsnav_forcemap` (see above) to use a specific minimap.
 
 Otherwise, there are two ways : either you create one yourself (with use of `guthscpsnav_generate` and a digital software) and put it in `materials/guth_scp/snav/MAP_NAME.png` or you ask me to make one. 
+
+## Legal Terms
+This addon is licensed under [Creative Commons Sharealike 3.0](https://creativecommons.org/licenses/by-sa/3.0/) and is based on content of [SCP Foundation](http://scp-wiki.wikidot.com/) and [SCP:Containment Breach](https://www.scpcbgame.com/).
+
+If you create something derived from this, please credit me (you can also tell me about what you've done).
 
 ***Enjoy !***
