@@ -180,22 +180,24 @@ hook.Add( "HUDPaint", "guthscpsnav:draw_snav", function()
             end
 
             --  draw npcs
-            for i, v in ipairs( guthscp.get_npcs() ) do
-                local class = v:GetClass()
-                if v:Health() <= 0 then continue end
-                if not IsEnemyEntityName( class ) then continue end
-                if v:GetPos():DistToSqr( ply_pos ) > guthscp.configs.guthscpsnav.show_scps_dist ^ 2 then continue end
-                
-                --  get npc name
-                local name = v:GetClass()
-                local data = list.Get( "NPC" )[name]
-                if data then
-                    name = data.Name
-                end
+			if guthscp.configs.guthscpsnav.npcs_enabled then
+				for i, v in ipairs( guthscp.get_npcs() ) do
+					local class = v:GetClass()
+					if v:Health() <= 0 then continue end
+					if guthscp.configs.guthscpsnav.npcs_hostile_only and not IsEnemyEntityName( class ) then continue end
+					if v:GetPos():DistToSqr( ply_pos ) > guthscp.configs.guthscpsnav.show_scps_dist ^ 2 then continue end
+					
+					--  get npc name
+					local name = v:GetClass()
+					local data = list.Get( "NPC" )[name]
+					if data then
+						name = data.Name
+					end
 
-                draw_hostile( v, name, text_n, relative_x, relative_y, true )
-                text_n = text_n + 1
-            end
+					draw_hostile( v, name, text_n, relative_x, relative_y, true )
+					text_n = text_n + 1
+				end
+			end
 
             --  continuous refreshing 
             if guthscp.configs.guthscpsnav.scp_constant_refresh then 

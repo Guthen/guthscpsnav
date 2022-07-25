@@ -53,6 +53,24 @@ MODULE.config = {
             id = "scp_constant_refresh",
             desc = "If checked, SCPs positions and distance will be constantly refreshed, else it will refresh at a constant rate (every time the texts \"blinks\")"
         },
+        {
+            type = "Category",
+            name = "NPCs",
+        },
+        {
+            type = "CheckBox",
+            name = "Enabled",
+            id = "npcs_enabled",
+            default = false,
+            desc = "If checked, NPCs will be shown on the S-NAV",
+        },
+        {
+            type = "CheckBox",
+            name = "Enabled",
+            id = "npcs_hostile_only",
+            default = true,
+            desc = "If checked, only hostile NPCs will be shown. Since it use `IsEnemyEntityName` internally, this may omit custom NPCs",
+        },
         guthscp.config.create_apply_button( MODULE.id )
     },
     receive = function( form )
