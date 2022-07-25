@@ -1,5 +1,3 @@
-util.AddNetworkString( "guthscpsnav:forcemap" )
-
 --  > Resources
 resource.AddSingleFile( "resource/fonts/ds-digital.ttf" )
 
@@ -32,6 +30,8 @@ hook.Add( "PlayerSay", "guthscpsnav", function( ply, txt )
 end )
 
 --  network
+util.AddNetworkString( "guthscpsnav:forcemap" )
+
 forcemap = CreateConVar( "guthscpsnav_forcemap", "", FCVAR_ARCHIVE, "Force a minimap image to be use instead of current map's image. Default: \"\"" )
 local function network_forcemap( ply, minimap )
     net.Start( "guthscpsnav:forcemap" )

@@ -1,9 +1,9 @@
 AddCSLuaFile()
 
-ENT.Base = "guthscpbase"
+ENT.Base = "guthscp_base"
 
 ENT.PrintName = "S-Nav Ultimate"
-ENT.Category = "Guthen's SENTs"
+ENT.Category = "GuthSCP"
 ENT.Spawnable = true
 
 ENT.Model = "models/props/scp/snav/snav.mdl"

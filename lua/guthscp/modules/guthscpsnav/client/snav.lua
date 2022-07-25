@@ -117,13 +117,13 @@ hook.Add( "HUDPaint", "guthscpsnav", function()
         end
 
         --  > SCPs
-        if GuthSCP and GuthSCP.getSCPs then
+        if guthscp and guthscp.get_scps then
             if not scp_is_blinking then
                 local drawn = 0
 
-                for i, v in ipairs( GuthSCP.getSCPs() ) do
+                for i, v in ipairs( guthscp.get_scps() ) do
                     if v == ply then continue end
-                    if v:GetPos():DistToSqr( ply_pos ) > ( GuthSCP and GuthSCP.Config.guthscpsnav.show_scps_dist or 724 ) ^ 2 then continue end
+                    if v:GetPos():DistToSqr( ply_pos ) > ( guthscp and guthscp.configs.guthscpsnav.show_scps_dist or 724 ) ^ 2 then continue end
 
                     draw.SimpleText( team.GetName( v:Team() ), font, screen_x + 4, screen_y + 3 + drawn * ( draw.GetFontHeight( font ) + 2 ), color_scp_ring )
                     surface.SetDrawColor( color_scp_ring )
@@ -139,7 +139,7 @@ hook.Add( "HUDPaint", "guthscpsnav", function()
 
                     surface.DrawCircle( center_x, center_y, scps_infos[v].dist, color_scp_ring )
 
-                    if GuthSCP and GuthSCP.Config.guthscpsnav.show_scps_pos then
+                    if guthscp and guthscp.configs.guthscpsnav.show_scps_pos then
                         draw_triangle( x, y, 180 - v:EyeAngles().y + 90, 6 )
                     end
 
@@ -147,7 +147,7 @@ hook.Add( "HUDPaint", "guthscpsnav", function()
                     drawn = drawn + 1
                 end
 
-                if GuthSCP.Config.guthscpsnav.scp_constant_refresh then 
+                if guthscp.configs.guthscpsnav.scp_constant_refresh then 
                     scps_infos = {}
                 end
             end
@@ -164,7 +164,7 @@ end )
 hook.Add( "PlayerButtonDown", "guthscpsnav", function( ply, button )
     if not ply:GetNWBool( "guthscp:snav", false ) then return end
 
-    if IsFirstTimePredicted() and button == ( GuthSCP and _G["KEY_" .. ( GuthSCP.Config.guthscpsnav.key or "M" )] or KEY_M ) then
+    if IsFirstTimePredicted() and button == ( guthscp and _G["KEY_" .. ( guthscp.configs.guthscpsnav.key or "M" )] or KEY_M ) then
         snav_show = not snav_show
         --if snav_show then
             surface.PlaySound( "guthen_scp/interact/PickItem2.ogg" )
