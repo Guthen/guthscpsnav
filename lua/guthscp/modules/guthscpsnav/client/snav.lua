@@ -34,6 +34,15 @@ local snav_screen_coords = {
 local screen_x, screen_y = snav_x + snav_screen_coords.start.x, snav_y + snav_screen_coords.start.y
 local screen_w, screen_h = snav_screen_coords.endpos.x - snav_screen_coords.start.x, snav_screen_coords.endpos.y - snav_screen_coords.start.y
 
+--  render info
+local scps_infos = {}
+local color_black, color_scp_ring = Color( 0, 0, 0 ), Color( 115, 31, 28 )
+local ply_next_blink, ply_is_blinking = CurTime() + .5, false
+local scp_next_blink, scp_is_blinking = ply_next_blink, ply_is_blinking
+local ply_pos
+local relative_x, relative_y = 0, 0
+local center_x, center_y = screen_x + screen_w / 2, screen_y + screen_h / 2
+
 --  map bounds
 local map_start, map_end
 local map_width, map_height
@@ -45,7 +54,23 @@ end
 get_map_bounds()
 hook.Add( "InitPostEntity", "guthscpsnav:get_map_bounds", get_map_bounds )
 
---  draw an outline triangle
+--  convert world to screen
+local function world_to_relative_pos( pos )
+    return math.Remap( pos.y, map_end.y, map_start.y, 0, snav_map_h ), 
+    math.Remap( pos.x, map_end.x, map_start.x, 0, snav_map_w )
+end
+
+local function world_to_screen_angle( angle )
+    return 180 - angle + 90
+end
+
+local function world_to_screen_pos( pos, relative_x, relative_y )
+    local x, y = world_to_relative_pos( pos )
+    return screen_x + x - relative_x + screen_w / 2,
+           screen_y + y - relative_y + screen_h / 2
+end
+
+--  draw funcs
 local function draw_triangle( x, y, ang, scale )
     local ang, ang_dif = math.rad( ang ), math.rad( 150 )
     local triangle = {
@@ -68,21 +93,32 @@ local function draw_triangle( x, y, ang, scale )
     surface.DrawLine( last_x, last_y, triangle[1].x, triangle[1].y )
 end
 
---  convert world to screen
-local function world_to_relative_pos( pos )
-    return math.Remap( pos.y, map_end.y, map_start.y, 0, snav_map_h ), 
-           math.Remap( pos.x, map_end.x, map_start.x, 0, snav_map_w )
-end
+local function draw_hostile( ent, text, text_n, relative_x, relative_y, should_draw_pos )
+    local pos = ent:GetPos()
 
-local function world_to_screen_angle( angle )
-    return 180 - angle + 90
+    --  draw text
+    draw.SimpleText( text, font, screen_x + 4, screen_y + 3 + text_n * ( font_height + 2 ), color_scp_ring )
+    
+    --  store data if not exist (due to refresh rate)
+    local x, y = world_to_screen_pos( pos, relative_x, relative_y )
+    local dist = math.Distance( x, y, center_x, center_y )
+    scps_infos[ent] = scps_infos[ent] or {
+        x = x,
+        y = y,
+        dist = dist,
+    }
+    
+    --  draw dist ring
+    surface.SetDrawColor( color_scp_ring )
+    surface.DrawCircle( center_x, center_y, scps_infos[ent].dist, color_scp_ring )
+
+    --  draw pos
+    if should_draw_pos then
+        draw_triangle( x, y, world_to_screen_angle( ent:EyeAngles().y ), 6 )
+    end
 end
 
 --  draw snav
-local scps_infos = {}
-local color_black, color_scp_ring = Color( 0, 0, 0 ), Color( 115, 31, 28 )
-local ply_next_blink, ply_is_blinking = CurTime() + .5, false
-local scp_next_blink, scp_is_blinking = ply_next_blink, ply_is_blinking
 hook.Add( "HUDPaint", "guthscpsnav:draw_snav", function()
     if not snav_show then return end
     if not map_end then get_map_bounds() end
@@ -90,20 +126,19 @@ hook.Add( "HUDPaint", "guthscpsnav:draw_snav", function()
     local ply = LocalPlayer()
     if not ply:GetNWBool( "guthscpsnav:has_snav", false ) then return end
 
+    ply_pos = ply:GetPos()
+    relative_x, relative_y = world_to_relative_pos( ply_pos )
+
     --  draw snav texture
     surface.SetMaterial( snav_texture )
     surface.SetDrawColor( color_white )
     surface.DrawTexturedRect( snav_x, snav_y, snav_w, snav_h )
 
-    --  draw snav screen
-    local ply_pos = ply:GetPos()
-    local relative_x, relative_y = world_to_relative_pos( ply_pos )
-    local center_x, center_y = screen_x + screen_w / 2, screen_y + screen_h / 2
-
     --  draw screen outline
     surface.SetDrawColor( color_black )
     surface.DrawOutlinedRect( screen_x, screen_y, screen_w, screen_h )
-
+    
+    --  draw snav screen
     render.SetScissorRect( screen_x, screen_y, screen_x + screen_w, screen_y + screen_h, true )
         --  draw map
         if not snav_map_texture:IsError() then
@@ -129,39 +164,35 @@ hook.Add( "HUDPaint", "guthscpsnav:draw_snav", function()
             ply_is_blinking = not ply_is_blinking
         end
 
-        --  draw scps
         if not scp_is_blinking then
-            local drawn = 0
-
+            local text_n = 0
+            
+            --  draw scps
             for i, v in ipairs( guthscp.get_scps() ) do
-                local v_pos = v:GetPos()
                 if v == ply then continue end
-                if v_pos:DistToSqr( ply_pos ) > guthscp.configs.guthscpsnav.show_scps_dist ^ 2 then continue end
+                if not v:Alive() then continue end
+                if v:GetPos():DistToSqr( ply_pos ) > guthscp.configs.guthscpsnav.show_scps_dist ^ 2 then continue end
 
-                --  draw text
-                draw.SimpleText( team.GetName( v:Team() ), font, screen_x + 4, screen_y + 3 + drawn * ( font_height + 2 ), color_scp_ring )
-                
-                --  store data if not exist (due to refresh rate)
-                local x, y = world_to_relative_pos( v_pos )
-                x = screen_x + x - relative_x + screen_w / 2
-                y = screen_y + y - relative_y + screen_h / 2
-                local dist = math.Distance( x, y, center_x, center_y )
-                scps_infos[v] = scps_infos[v] or {
-                    x = x,
-                    y = y,
-                    dist = dist,
-                }
-                
-                --  draw dist ring
-                surface.SetDrawColor( color_scp_ring )
-                surface.DrawCircle( center_x, center_y, scps_infos[v].dist, color_scp_ring )
+                draw_hostile( v, team.GetName( v:Team() ), text_n, relative_x, relative_y, guthscp.configs.guthscpsnav.show_scps_pos )
+                text_n = text_n + 1
+            end
 
-                --  draw pos
-                if guthscp.configs.guthscpsnav.show_scps_pos then
-                    draw_triangle( x, y, world_to_screen_angle( v:EyeAngles().y ), 6 )
+            --  draw npcs
+            for i, v in ipairs( guthscp.get_npcs() ) do
+                local class = v:GetClass()
+                if v:Health() <= 0 then continue end
+                if not IsEnemyEntityName( class ) then continue end
+                if v:GetPos():DistToSqr( ply_pos ) > guthscp.configs.guthscpsnav.show_scps_dist ^ 2 then continue end
+                
+                --  get npc name
+                local name = v:GetClass()
+                local data = list.Get( "NPC" )[name]
+                if data then
+                    name = data.Name
                 end
 
-                drawn = drawn + 1
+                draw_hostile( v, name, text_n, relative_x, relative_y, true )
+                text_n = text_n + 1
             end
 
             --  continuous refreshing 
