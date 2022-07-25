@@ -4,7 +4,10 @@ local MODULE = {
     version = "2.0.0",
     icon = "icon16/map.png",
     version_url = "https://raw.githubusercontent.com/Guthen/guthscpsnav/master/lua/guthscp/modules/guthsnav/main.lua",
-	requires = {
+    dependencies = {
+		base = "2.0.0",
+	},
+    requires = {
 		["server/"] = guthscp.REALMS.SERVER,
 		["client/"] = guthscp.REALMS.CLIENT,
 	},
