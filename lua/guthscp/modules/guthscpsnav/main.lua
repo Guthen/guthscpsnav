@@ -28,6 +28,13 @@ MODULE.config = {
             name = "SCPs",
         },
         {
+            type = "CheckBox",
+            name = "Enabled",
+            id = "scps_enabled",
+            default = true,
+            desc = "If checked, SCPs will be shown on the S-NAV Ultimate",
+        },
+        {
             type = "NumWang",
             name = "Show Distance",
             id = "show_scps_dist",

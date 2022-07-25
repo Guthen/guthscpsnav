@@ -168,13 +168,15 @@ hook.Add( "HUDPaint", "guthscpsnav:draw_snav", function()
             local text_n = 0
             
             --  draw scps
-            for i, v in ipairs( guthscp.get_scps() ) do
-                if v == ply then continue end
-                if not v:Alive() then continue end
-                if v:GetPos():DistToSqr( ply_pos ) > guthscp.configs.guthscpsnav.show_scps_dist ^ 2 then continue end
+            if guthscp.configs.guthscpsnav.scps_enabled then
+                for i, v in ipairs( guthscp.get_scps() ) do
+                    if v == ply then continue end
+                    if not v:Alive() then continue end
+                    if v:GetPos():DistToSqr( ply_pos ) > guthscp.configs.guthscpsnav.show_scps_dist ^ 2 then continue end
 
-                draw_hostile( v, team.GetName( v:Team() ), text_n, relative_x, relative_y, guthscp.configs.guthscpsnav.show_scps_pos )
-                text_n = text_n + 1
+                    draw_hostile( v, team.GetName( v:Team() ), text_n, relative_x, relative_y, guthscp.configs.guthscpsnav.show_scps_pos )
+                    text_n = text_n + 1
+                end
             end
 
             --  draw npcs
