@@ -93,7 +93,7 @@ local function draw_triangle( x, y, ang, scale )
     surface.DrawLine( last_x, last_y, triangle[1].x, triangle[1].y )
 end
 
-local function draw_hostile( ent, text, text_n, relative_x, relative_y, should_draw_pos )
+local function draw_hostile( ent, text, text_n, relative_x, relative_y )
     local pos = ent:GetPos()
 
     --  draw text
@@ -113,7 +113,7 @@ local function draw_hostile( ent, text, text_n, relative_x, relative_y, should_d
     surface.DrawCircle( center_x, center_y, scps_infos[ent].dist, color_scp_ring )
 
     --  draw pos
-    if should_draw_pos then
+    if guthscp.configs.guthscpsnav.show_hostiles_pos then
         draw_triangle( x, y, world_to_screen_angle( ent:EyeAngles().y ), 6 )
     end
 end
@@ -172,9 +172,9 @@ hook.Add( "HUDPaint", "guthscpsnav:draw_snav", function()
                 for i, v in ipairs( guthscp.get_scps() ) do
                     if v == ply then continue end
                     if not v:Alive() then continue end
-                    if v:GetPos():DistToSqr( ply_pos ) > guthscp.configs.guthscpsnav.show_scps_dist ^ 2 then continue end
+                    if v:GetPos():DistToSqr( ply_pos ) > guthscp.configs.guthscpsnav.hostiles_dist ^ 2 then continue end
 
-                    draw_hostile( v, team.GetName( v:Team() ), text_n, relative_x, relative_y, guthscp.configs.guthscpsnav.show_scps_pos )
+                    draw_hostile( v, team.GetName( v:Team() ), text_n, relative_x, relative_y )
                     text_n = text_n + 1
                 end
             end
@@ -185,7 +185,7 @@ hook.Add( "HUDPaint", "guthscpsnav:draw_snav", function()
 					local class = v:GetClass()
 					if v:Health() <= 0 then continue end
 					if guthscp.configs.guthscpsnav.npcs_hostile_only and not IsEnemyEntityName( class ) then continue end
-					if v:GetPos():DistToSqr( ply_pos ) > guthscp.configs.guthscpsnav.show_scps_dist ^ 2 then continue end
+					if v:GetPos():DistToSqr( ply_pos ) > guthscp.configs.guthscpsnav.hostiles_dist ^ 2 then continue end
 					
 					--  get npc name
 					local name = v:GetClass()
@@ -194,13 +194,13 @@ hook.Add( "HUDPaint", "guthscpsnav:draw_snav", function()
 						name = data.Name
 					end
 
-					draw_hostile( v, name, text_n, relative_x, relative_y, true )
+					draw_hostile( v, name, text_n, relative_x, relative_y )
 					text_n = text_n + 1
 				end
 			end
 
             --  continuous refreshing 
-            if guthscp.configs.guthscpsnav.scp_constant_refresh then 
+            if guthscp.configs.guthscpsnav.hostile_constant_refresh then 
                 scps_infos = {}
             end
         end
