@@ -1,4 +1,4 @@
---  > Font
+--  loading fonts
 local font = "guthscpsnav:scp"
 surface.CreateFont( font, {
     font = "DS-Digital",
@@ -10,7 +10,9 @@ surface.CreateFont( font .. ":info", {
     size = math.Round( ScreenScale( 7.5 ) ),
 } )
 
---  > S-NAV
+local font_height = draw.GetFontHeight( font )
+
+--  setup
 local snav_show = true
 local snav_map_texture = Material( "guth_scp/snav/" .. game.GetMap() .. ".png" )
 local snav_map_w, snav_map_h = snav_map_texture:Width(), snav_map_texture:Height()
@@ -19,24 +21,20 @@ local snav_w, snav_h = snav_texture:Width(), snav_texture:Height()
 local snav_x, snav_y = ScrW() - snav_w * .95, ScrH() - snav_h * .95
 local snav_screen_coords = {
     start = {
-        --x = 73,
-        --y = 42,
         x = 83,
         y = 76,
     },
     endpos = {
-        --x = 361,
-        --y = 306 - 13,
         x = 348,
         y = 296,
     }
 }
 
---  > Screen bounds
+--  screen bounds
 local screen_x, screen_y = snav_x + snav_screen_coords.start.x, snav_y + snav_screen_coords.start.y
 local screen_w, screen_h = snav_screen_coords.endpos.x - snav_screen_coords.start.x, snav_screen_coords.endpos.y - snav_screen_coords.start.y
 
---  > Map bounds
+--  map bounds
 local map_start, map_end
 local map_width, map_height
 local function get_map_bounds()
@@ -45,20 +43,20 @@ local function get_map_bounds()
     map_width, map_height = map_end.x - map_start.x, map_end.y - map_start.y
 end
 get_map_bounds()
-hook.Add( "InitPostEntity", "guthscpsnav", get_map_bounds )
+hook.Add( "InitPostEntity", "guthscpsnav:get_map_bounds", get_map_bounds )
 
---  > Draw an outline triangle
+--  draw an outline triangle
 local function draw_triangle( x, y, ang, scale )
     local ang, ang_dif = math.rad( ang ), math.rad( 150 )
     local triangle = {
-        --  > Spike point
+        --  spike point
         { x = x + math.cos( ang ) * scale , y = y + math.sin( ang ) * scale },
-        --  > Segment points
+        --  segment points
         { x = x + math.cos( ang + ang_dif ) * scale , y = y + math.sin( ang + ang_dif ) * scale },
         { x = x + math.cos( ang - ang_dif ) * scale , y = y + math.sin( ang - ang_dif ) * scale }
     }
 
-    --  > Draw lines
+    --  draw lines
     local last_x, last_y = triangle[1].x, triangle[1].y
     for i = 2, #triangle do
         local v = triangle[i]
@@ -70,89 +68,109 @@ local function draw_triangle( x, y, ang, scale )
     surface.DrawLine( last_x, last_y, triangle[1].x, triangle[1].y )
 end
 
+--  convert world to screen
+local function world_to_relative_pos( pos )
+    return math.Remap( pos.y, map_end.y, map_start.y, 0, snav_map_h ), 
+           math.Remap( pos.x, map_end.x, map_start.x, 0, snav_map_w )
+end
+
+local function world_to_screen_angle( angle )
+    return 180 - angle + 90
+end
+
+--  draw snav
 local scps_infos = {}
 local color_black, color_scp_ring = Color( 0, 0, 0 ), Color( 115, 31, 28 )
 local ply_next_blink, ply_is_blinking = CurTime() + .5, false
 local scp_next_blink, scp_is_blinking = ply_next_blink, ply_is_blinking
-hook.Add( "HUDPaint", "guthscpsnav", function()
+hook.Add( "HUDPaint", "guthscpsnav:draw_snav", function()
     if not snav_show then return end
     if not map_end then get_map_bounds() end
 
     local ply = LocalPlayer()
-    if not ply:GetNWBool( "guthscp:snav", false ) then return end
+    if not ply:GetNWBool( "guthscpsnav:has_snav", false ) then return end
 
-    --  > S-NAV Texture
+    --  draw snav texture
     surface.SetMaterial( snav_texture )
     surface.SetDrawColor( color_white )
     surface.DrawTexturedRect( snav_x, snav_y, snav_w, snav_h )
 
-    --  > S-NAV Screen
+    --  draw snav screen
     local ply_pos = ply:GetPos()
-    local relative_x, relative_y = math.Remap( ply_pos.y, map_end.y, map_start.y, 0, snav_map_h ), math.Remap( ply_pos.x, map_end.x, map_start.x, 0, snav_map_w )
+    local relative_x, relative_y = world_to_relative_pos( ply_pos )
     local center_x, center_y = screen_x + screen_w / 2, screen_y + screen_h / 2
 
+    --  draw screen outline
     surface.SetDrawColor( color_black )
     surface.DrawOutlinedRect( screen_x, screen_y, screen_w, screen_h )
+
     render.SetScissorRect( screen_x, screen_y, screen_x + screen_w, screen_y + screen_h, true )
-        --  > Map
+        --  draw map
         if not snav_map_texture:IsError() then
             surface.SetMaterial( snav_map_texture )
             surface.SetDrawColor( color_white )
             surface.DrawTexturedRect( screen_x - relative_x + screen_w / 2, screen_y - relative_y + screen_h / 2, snav_map_w, snav_map_h )
+        --  draw error
         elseif not scp_is_blinking then
             local offset = 5
             draw.SimpleText( "COULD NOT CONNECT", font .. ":info", screen_x + screen_w / 2, screen_y + screen_h - draw.GetFontHeight( font ) - offset, color_scp_ring, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM )
-            draw.SimpleText( "TO MAP DATABASE", font .. ":info", screen_x + screen_w / 2, screen_y + screen_h - offset, color_scp_ring, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM )    
+            draw.SimpleText( "TO MAP DATABASE", font .. ":info", screen_x + screen_w / 2, screen_y + screen_h - offset, color_scp_ring, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM )
         end
 
-        --  > Player
+        --  draw player pos
         if not ply_is_blinking then
             surface.SetDrawColor( color_black )
-            draw_triangle( center_x, center_y, 180 - ply:GetAngles().y + 90, 6 )
+            draw_triangle( center_x, center_y, world_to_screen_angle( ply:EyeAngles().y ), 6 )
         end
 
+        --  blink animation
         if ply_next_blink < CurTime() then 
             ply_next_blink = ply_is_blinking and CurTime() + 1 or CurTime() + .35
             ply_is_blinking = not ply_is_blinking
         end
 
-        --  > SCPs
-        if guthscp and guthscp.get_scps then
-            if not scp_is_blinking then
-                local drawn = 0
+        --  draw scps
+        if not scp_is_blinking then
+            local drawn = 0
 
-                for i, v in ipairs( guthscp.get_scps() ) do
-                    if v == ply then continue end
-                    if v:GetPos():DistToSqr( ply_pos ) > ( guthscp and guthscp.configs.guthscpsnav.show_scps_dist or 724 ) ^ 2 then continue end
+            for i, v in ipairs( guthscp.get_scps() ) do
+                local v_pos = v:GetPos()
+                if v == ply then continue end
+                if v_pos:DistToSqr( ply_pos ) > guthscp.configs.guthscpsnav.show_scps_dist ^ 2 then continue end
 
-                    draw.SimpleText( team.GetName( v:Team() ), font, screen_x + 4, screen_y + 3 + drawn * ( draw.GetFontHeight( font ) + 2 ), color_scp_ring )
-                    surface.SetDrawColor( color_scp_ring )
+                --  draw text
+                draw.SimpleText( team.GetName( v:Team() ), font, screen_x + 4, screen_y + 3 + drawn * ( font_height + 2 ), color_scp_ring )
+                
+                --  store data if not exist (due to refresh rate)
+                local x, y = world_to_relative_pos( v_pos )
+                x = screen_x + x - relative_x + screen_w / 2
+                y = screen_y + y - relative_y + screen_h / 2
+                local dist = math.Distance( x, y, center_x, center_y )
+                scps_infos[v] = scps_infos[v] or {
+                    x = x,
+                    y = y,
+                    dist = dist,
+                }
+                
+                --  draw dist ring
+                surface.SetDrawColor( color_scp_ring )
+                surface.DrawCircle( center_x, center_y, scps_infos[v].dist, color_scp_ring )
 
-                    local x = screen_x + math.Remap( v:GetPos().y, map_end.y, map_start.y, 0, snav_map_h ) - relative_x + screen_w / 2
-                    local y = screen_y + math.Remap( v:GetPos().x, map_end.x, map_start.x, 0, snav_map_w ) - relative_y + screen_h / 2
-                    local dist = math.Distance( x, y, center_x, center_y )
-                    scps_infos[v] = scps_infos[v] or {
-                        x = x,
-                        y = y,
-                        dist = dist,
-                    }
-
-                    surface.DrawCircle( center_x, center_y, scps_infos[v].dist, color_scp_ring )
-
-                    if guthscp and guthscp.configs.guthscpsnav.show_scps_pos then
-                        draw_triangle( x, y, 180 - v:EyeAngles().y + 90, 6 )
-                    end
-
-
-                    drawn = drawn + 1
+                --  draw pos
+                if guthscp.configs.guthscpsnav.show_scps_pos then
+                    draw_triangle( x, y, world_to_screen_angle( v:EyeAngles().y ), 6 )
                 end
 
-                if guthscp.configs.guthscpsnav.scp_constant_refresh then 
-                    scps_infos = {}
-                end
+                drawn = drawn + 1
+            end
+
+            --  continuous refreshing 
+            if guthscp.configs.guthscpsnav.scp_constant_refresh then 
+                scps_infos = {}
             end
         end
 
+        --  scp blinking animation
         if scp_next_blink < CurTime() then
             scp_next_blink = CurTime() + .35
             scp_is_blinking = not scp_is_blinking
@@ -161,19 +179,18 @@ hook.Add( "HUDPaint", "guthscpsnav", function()
     render.SetScissorRect( 0, 0, 0, 0, false )
 end )
 
-hook.Add( "PlayerButtonDown", "guthscpsnav", function( ply, button )
-    if not ply:GetNWBool( "guthscp:snav", false ) then return end
+hook.Add( "PlayerButtonDown", "guthscpsnav:toggle_snav", function( ply, button )
+    if not IsFirstTimePredicted() then return end
+    if not ply:GetNWBool( "guthscpsnav:has_snav", false ) then return end
 
-    if IsFirstTimePredicted() and button == ( guthscp and _G["KEY_" .. ( guthscp.configs.guthscpsnav.key or "M" )] or KEY_M ) then
+    if button == _G["KEY_" .. guthscp.configs.guthscpsnav.key] then
         snav_show = not snav_show
-        --if snav_show then
-            surface.PlaySound( "guthen_scp/interact/PickItem2.ogg" )
-        --end
+        surface.PlaySound( "guthen_scp/interact/PickItem2.ogg" )
     end
 end )
 
 --  forcemap
-hook.Add( "InitPostEntity", "guthscpsnav", function()
+hook.Add( "InitPostEntity", "guthscpsnav:retrieve_forcemap", function()
     net.Start( "guthscpsnav:forcemap" )
     net.SendToServer()
 end )
@@ -186,10 +203,10 @@ net.Receive( "guthscpsnav:forcemap", function()
 end )
 
 
---  > nav generation
+--  snav generation
 concommand.Add( "guthscpsnav_generate", function()
     hook.Add( "HUDPaint", "guthscpsnav:generate", function()
-        --  > generate
+        --  generate
         local generate_screen_size = ScrH()
         local middle_pos = LerpVector( .5, map_start, map_end )
         render.RenderView( {
@@ -213,7 +230,7 @@ concommand.Add( "guthscpsnav_generate", function()
         surface.SetDrawColor( color_scp_ring )
         draw_triangle( math.Remap( pos.y, map_end.y, map_start.y, 0, generate_screen_size ), math.Remap( pos.x, map_end.x, map_start.x, 0, generate_screen_size ), 180 - LocalPlayer():GetAngles().y + 90, 15 ) ]]
 
-        --  > write
+        --  write
         if input.IsMouseDown( MOUSE_MIDDLE ) then
             file.CreateDir( "guth_scp/snav" )
             file.Write( "guth_scp/snav/" .. game.GetMap() .. ".png", render.Capture( {

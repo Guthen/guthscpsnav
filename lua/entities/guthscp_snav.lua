@@ -9,8 +9,8 @@ ENT.Spawnable = true
 ENT.Model = "models/props/scp/snav/snav.mdl"
 
 function ENT:Use( ply )
-    if ply:GetNWBool( "guthscp:snav", false ) then return end
+    if ply:GetNWBool( "guthscpsnav:has_snav", false ) then return end
 
-    ply:SetNWBool( "guthscp:snav", true )
+    ply:SetNWBool( "guthscpsnav:has_snav", true )
     self:Pick()
 end
