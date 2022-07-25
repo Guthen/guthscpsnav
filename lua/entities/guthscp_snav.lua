@@ -14,3 +14,7 @@ function ENT:Use( ply )
     ply:SetNWBool( "guthscpsnav:has_snav", true )
     self:Pick()
 end
+
+if CLIENT and guthscp then
+    guthscp.spawnmenu.add_entity( ENT, "General" )
+end
