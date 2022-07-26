@@ -100,13 +100,14 @@ local function draw_hostile( ent, text, text_n, relative_x, relative_y )
     draw.SimpleText( text, font, screen_x + 4, screen_y + 3 + text_n * ( font_height + 2 ), color_scp_ring )
     
     --  store data if not exist (due to refresh rate)
-    local x, y = world_to_screen_pos( pos, relative_x, relative_y )
-    local dist = math.Distance( x, y, center_x, center_y )
-    scps_infos[ent] = scps_infos[ent] or {
-        x = x,
-        y = y,
-        dist = dist,
-    }
+    local x, y = world_to_screen_pos( scps_infos[ent] and scps_infos[ent].pos or pos, relative_x, relative_y )
+    if not scps_infos[ent] then
+        scps_infos[ent] = scps_infos[ent] or {
+            pos = pos,
+            angle = world_to_screen_angle( ent:EyeAngles().y ),
+            dist = math.Distance( x, y, center_x, center_y ),
+        }
+    end
     
     --  draw dist ring
     surface.SetDrawColor( color_scp_ring )
@@ -114,7 +115,7 @@ local function draw_hostile( ent, text, text_n, relative_x, relative_y )
 
     --  draw pos
     if guthscp.configs.guthscpsnav.show_hostiles_pos then
-        draw_triangle( x, y, world_to_screen_angle( ent:EyeAngles().y ), 6 )
+        draw_triangle( x, y, scps_infos[ent].angle, 6 )
     end
 end
 
@@ -169,7 +170,8 @@ hook.Add( "HUDPaint", "guthscpsnav:draw_snav", function()
             
             --  draw scps
             if guthscp.configs.guthscpsnav.scps_enabled then
-                for i, v in ipairs( guthscp.get_scps() ) do
+                scps_infos.scps = scps_infos.scps or guthscp.get_scps()
+                for i, v in ipairs( scps_infos.scps ) do
                     if v == ply then continue end
                     if not v:Alive() then continue end
                     if v:GetPos():DistToSqr( ply_pos ) > guthscp.configs.guthscpsnav.hostiles_dist ^ 2 then continue end
@@ -181,7 +183,8 @@ hook.Add( "HUDPaint", "guthscpsnav:draw_snav", function()
 
             --  draw npcs
 			if guthscp.configs.guthscpsnav.npcs_enabled then
-				for i, v in ipairs( guthscp.get_npcs() ) do
+                scps_infos.npcs = scps_infos.npcs or guthscp.get_npcs()
+				for i, v in ipairs( scps_infos.npcs ) do
 					local class = v:GetClass()
 					if v:Health() <= 0 then continue end
 					if guthscp.configs.guthscpsnav.npcs_hostile_only and not IsEnemyEntityName( class ) then continue end
