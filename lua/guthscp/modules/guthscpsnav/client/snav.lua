@@ -161,7 +161,7 @@ hook.Add( "HUDPaint", "guthscpsnav:draw_snav", function()
 
         --  blink animation
         if ply_next_blink < CurTime() then 
-            ply_next_blink = ply_is_blinking and CurTime() + 1 or CurTime() + .35
+            ply_next_blink = ply_is_blinking and CurTime() + guthscp.configs.guthscpsnav.blink_time * 2 or CurTime() + guthscp.configs.guthscpsnav.blink_time
             ply_is_blinking = not ply_is_blinking
         end
 
@@ -210,7 +210,7 @@ hook.Add( "HUDPaint", "guthscpsnav:draw_snav", function()
 
         --  scp blinking animation
         if scp_next_blink < CurTime() then
-            scp_next_blink = CurTime() + .35
+            scp_next_blink = CurTime() + guthscp.configs.guthscpsnav.blink_time
             scp_is_blinking = not scp_is_blinking
             scps_infos = {}
         end

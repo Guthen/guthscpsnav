@@ -28,6 +28,15 @@ MODULE.config = {
         },
         {
             type = "NumWang",
+            name = "Blink Time",
+            id = "blink_time",
+            default = .33,
+            desc = "Time between each S-NAV screen refresh and especially to refresh the hostiles and their positions",
+            decimals = 2,
+            min = 0,
+        },
+        {
+            type = "NumWang",
             name = "Show Distance",
             id = "hostiles_dist",
             default = 724,
