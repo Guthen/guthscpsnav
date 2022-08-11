@@ -1,6 +1,6 @@
 local MODULE = {
-    id = "guthscpsnav",
     name = "S-NAV Ultimate",
+    author = "Guthen",
     version = "2.0.0",
     icon = "icon16/map.png",
     version_url = "https://raw.githubusercontent.com/Guthen/guthscpsnav/master/lua/guthscp/modules/guthsnav/main.lua",
@@ -93,5 +93,5 @@ MODULE.config = {
     end,
 }
 
-guthscp.module.hot_reload( MODULE )
+guthscp.module.hot_reload( "guthscpsnav" )
 return MODULE
