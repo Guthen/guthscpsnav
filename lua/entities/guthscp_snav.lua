@@ -9,12 +9,12 @@ ENT.Spawnable = true
 ENT.Model = "models/props/scp/snav/snav.mdl"
 
 function ENT:Use( ply )
-    if ply:GetNWBool( "guthscpsnav:has_snav", false ) then return end
+	if ply:GetNWBool( "guthscpsnav:has_snav", false ) then return end
 
-    ply:SetNWBool( "guthscpsnav:has_snav", true )
-    self:Pick()
+	ply:SetNWBool( "guthscpsnav:has_snav", true )
+	self:Pick()
 end
 
 if CLIENT and guthscp then
-    guthscp.spawnmenu.add_entity( ENT, "General" )
+	guthscp.spawnmenu.add_entity( ENT, "General" )
 end
