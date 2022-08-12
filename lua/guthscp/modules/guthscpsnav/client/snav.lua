@@ -14,9 +14,9 @@ local font_height = draw.GetFontHeight( font )
 
 --  setup
 local snav_show = true
-local snav_map_texture = Material( "guth_scp/snav/" .. game.GetMap() .. ".png" )
+local snav_map_texture = Material( "guthscpsnav/minimaps/" .. game.GetMap() .. ".png" )
 local snav_map_w, snav_map_h = snav_map_texture:Width(), snav_map_texture:Height()
-local snav_texture = Material( "guth_scp/snav/navigator.png" )
+local snav_texture = Material( "guthscpsnav/navigator.png" )
 local snav_w, snav_h = snav_texture:Width(), snav_texture:Height()
 local snav_x, snav_y = ScrW() - snav_w * .95, ScrH() - snav_h * .95
 local snav_screen_coords = {
