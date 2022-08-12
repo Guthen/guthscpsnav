@@ -243,12 +243,93 @@ end )
 
 --  snav generation
 concommand.Add( "guthscpsnav_generate", function()
+	local generate_screen_size = ScrH()
+	local ask_capture = false
+
+	--  frame
+	local frame = vgui.Create( "DFrame" )
+	frame:SetSize( 500, 500 )
+	frame:SetPos( generate_screen_size + ( ScrW() - generate_screen_size ) / 2 - frame:GetWide() / 2, ScrH() / 2 - frame:GetTall() / 2 )
+	frame:SetTitle( "guthscpsnav minimap generator" )
+	frame:MakePopup()
+	function frame:OnClose()
+		hook.Remove( "HUDPaint", "guthscpsnav:generate" )
+	end
+
+	--  populate data
+	local data = {
+		znear = {
+			type = "slider",
+			decimals = 0,
+			min = 0, max = 15000,
+			value = 2000,
+		},
+		zfar = {
+			type = "slider",
+			decimals = 0,
+			min = 0, max = 15000,
+			value = 8000,
+		},
+		height_offset = {
+			type = "slider",
+			decimals = 0,
+			min = 0, max = 15000,
+			value = 2500,
+		},
+	}
+
+	local container_data = frame:Add( "DPanel" )
+	container_data:Dock( TOP )
+	container_data:DockPadding( 10, 0, 10, 10 )
+	container_data:SetPaintBackground( false )
+	
+	local category_data = container_data:Add( "DLabel" )
+	category_data:Dock( TOP )
+	category_data:SetText( "data" )
+	category_data:SetFont( "DermaDefaultBold" )
+
+	for k, v in pairs( data ) do
+		--  create vgui
+		local panel = container_data:Add( "DNumSlider" )
+		panel:Dock( TOP )
+		panel:SetMinMax( v.min, v.max )
+		panel:SetDecimals( v.decimals )
+		panel:SetValue( v.value )
+		panel:SetText( k:gsub( "_", " " ) )
+		function panel:OnValueChanged( value )
+			data[k].value = value
+		end
+	end
+
+	--  save button
+	local container_button = frame:Add( "DPanel" )
+	container_button:Dock( TOP )
+	container_button:DockPadding( 10, 0, 10, 10 )
+	container_button:SetTall( 50 )
+	container_button:SetPaintBackground( false )
+
+	local button_save = container_button:Add( "DButton" )
+	button_save:Dock( FILL )
+	button_save:SetText( "save to data" )
+	function button_save:DoClick()
+		ask_capture = true
+	end
+
+	--  container size to children 
+	container_data:InvalidateLayout( true )
+	container_data:SizeToChildren( false, true )
+
+	--  frame size to children
+	frame:InvalidateLayout( true )
+	frame:SizeToChildren( false, true )
+	frame:CenterVertical()
+
+	--  render map
 	hook.Add( "HUDPaint", "guthscpsnav:generate", function()
 		--  generate
-		local generate_screen_size = ScrH()
 		local middle_pos = LerpVector( .5, map_start, map_end )
 		render.RenderView( {
-			origin = middle_pos + Vector( 0, 0, 2500 ),
+			origin = middle_pos + Vector( 0, 0, data.height_offset.value ),
 			angles = Angle( 90, 90, 90 ),
 			ortho = {
 				left = -map_height / 2,
@@ -256,8 +337,8 @@ concommand.Add( "guthscpsnav_generate", function()
 				top = -map_width / 2,
 				bottom = map_width / 2,
 			},
-			znear = 4000,
-			zfar = 8000,
+			znear = data.znear.value,
+			zfar = data.zfar.value,
 			x = 0,
 			y = 0,
 			w = generate_screen_size,
@@ -267,11 +348,13 @@ concommand.Add( "guthscpsnav_generate", function()
 		--[[ local pos = LocalPlayer():GetPos()
 		surface.SetDrawColor( color_scp_ring )
 		draw_triangle( math.Remap( pos.y, map_end.y, map_start.y, 0, generate_screen_size ), math.Remap( pos.x, map_end.x, map_start.x, 0, generate_screen_size ), 180 - LocalPlayer():GetAngles().y + 90, 15 ) ]]
+	
+		--  save to file
+		if ask_capture then
+			ask_capture = false
 
-		--  write
-		if input.IsMouseDown( MOUSE_MIDDLE ) then
-			file.CreateDir( "guth_scp/snav" )
-			file.Write( "guth_scp/snav/" .. game.GetMap() .. ".png", render.Capture( {
+			local path = "snav/" .. game.GetMap() .. ".png"
+			guthscp.data.save( path, render.Capture( {
 				format = "png",
 				x = 0,
 				y = 0,
@@ -279,7 +362,7 @@ concommand.Add( "guthscpsnav_generate", function()
 				h = generate_screen_size,
 			} ) )
 
-			hook.Remove( "HUDPaint", "guthscpsnav:generate" )
+			chat.AddText( color_white, ( "Your minimap was saved at %q!" ):format( guthscp.data.path .. "snav/" .. game.GetMap() .. ".png" ) )
 		end
 	end )
 end )
