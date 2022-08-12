@@ -40,6 +40,9 @@ If the map you are using is equivalent with one of the **Supported Maps**, then 
 
 Otherwise, there are two ways : either you create one yourself (with use of `guthscpsnav_generate` and a digital software) and put it in `materials/guth_scp/snav/MAP_NAME.png` or you ask me to make one. 
 
+### "How can I create my own minimap?"
+Read the [CREATE_MINIMAP.md](https://github.com/Guthen/guthscpsnav/blob/master/CREATE_MINIMAP.md)
+
 ## Legal Terms
 This addon is licensed under [Creative Commons Sharealike 3.0](https://creativecommons.org/licenses/by-sa/3.0/) and is based on content of [SCP Foundation](http://scp-wiki.wikidot.com/) and [SCP:Containment Breach](https://www.scpcbgame.com/).
 

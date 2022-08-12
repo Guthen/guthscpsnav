@@ -362,7 +362,7 @@ concommand.Add( "guthscpsnav_generate", function()
 				h = generate_screen_size,
 			} ) )
 
-			chat.AddText( color_white, ( "Your minimap was saved at %q!" ):format( guthscp.data.path .. "snav/" .. game.GetMap() .. ".png" ) )
+			chat.AddText( color_white, ( "Your minimap was saved at %q!" ):format( "garrysmod/data/" .. guthscp.data.path .. "snav/" .. game.GetMap() .. ".png" ) )
 		end
 	end )
 end )
