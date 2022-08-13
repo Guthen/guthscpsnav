@@ -236,7 +236,7 @@ end )
 net.Receive( "guthscpsnav:forcemap", function()
 	local map = net.ReadString()
 	if map == "" then map = game.GetMap() end
-	snav_map_texture = Material( "guth_scp/snav/" .. map .. ".png" )
+	snav_map_texture = Material( "guthscpsnav/minimaps/" .. map .. ".png" )
 	snav_map_w, snav_map_h = snav_map_texture:Width(), snav_map_texture:Height()
 end )
 
