@@ -14,7 +14,7 @@ This addon is available on the Workshop [here](https://steamcommunity.com/shared
 + Pickable **S-NAV Ultimate** Entity
     + Toggable with a key (default `M`)
     + Shows a **Minimap**
-    + Shows **Surrounding SCPs players** with configurable distance
+    + Shows **Surrounding SCPs/NPCs players** with configurable distance
     + Droppable with a chat command `/dropsnav`
 + Configurable (`guthscpbase` in the console)
 
@@ -25,6 +25,7 @@ This addon is available on the Workshop [here](https://steamcommunity.com/shared
 + [rp_site10](https://steamcommunity.com/sharedfiles/filedetails/?id=2163851948) ─ *7th May 2021*
 + [rp_zone_tsade_v1f_fr](https://steamcommunity.com/sharedfiles/filedetails/?id=2263738446) ─ *22th June 2021*
 + [rp_zone_tsade_v1f_us](https://steamcommunity.com/sharedfiles/filedetails/?id=2263738446) (with use of forcemap to 'rp_zone_tsade_v1f_fr')
++ [rp_site48_v2](https://steamcommunity.com/sharedfiles/filedetails/?id=2583189910) ─ *13th August 2022* (yeye my birthday)
 
 ## Convars
 + `guthscpsnav_forcemap <MAP_NAME>`: *Server*; Force a specific minimap to be use instead of current map's image (see the list above). Default: ""
@@ -37,8 +38,6 @@ Be sure to have installed [[SCP] Guthen's Addons Base](https://steamcommunity.co
 This message appears on the **S-NAV Ultimate** when the current map does not have an assigned minimap. 
 
 If the map you are using is equivalent with one of the **Supported Maps**, then use the server convar `guthscpsnav_forcemap` (see above) to use a specific minimap.
-
-Otherwise, there are two ways : either you create one yourself (with use of `guthscpsnav_generate` and a digital software) and put it in `materials/guth_scp/snav/MAP_NAME.png` or you ask me to make one. 
 
 ### "How can I create my own minimap?"
 Read the [CREATE_MINIMAP.md](https://github.com/Guthen/guthscpsnav/blob/master/CREATE_MINIMAP.md)
