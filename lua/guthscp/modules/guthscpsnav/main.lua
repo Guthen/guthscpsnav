@@ -2,6 +2,7 @@ local MODULE = {
 	name = "S-NAV Ultimate",
 	author = "Guthen",
 	version = "2.0.0",
+	description = "A portable mini-map capable of showing nearby SCPs & NPCs hostiles!",
 	icon = "icon16/map.png",
 	version_url = "https://raw.githubusercontent.com/Guthen/guthscpsnav/master/lua/guthscp/modules/guthsnav/main.lua",
 	dependencies = {
