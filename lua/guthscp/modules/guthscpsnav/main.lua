@@ -4,7 +4,7 @@ local MODULE = {
 	version = "2.0.0",
 	description = "A portable mini-map capable of showing nearby SCPs & NPCs hostiles!",
 	icon = "icon16/map.png",
-	version_url = "https://raw.githubusercontent.com/Guthen/guthscpsnav/master/lua/guthscp/modules/guthsnav/main.lua",
+	version_url = "https://raw.githubusercontent.com/Guthen/guthscpsnav/update-to-guthscpbase-remaster/lua/guthscp/modules/guthscpsnav/main.lua",
 	dependencies = {
 		base = "2.0.0",
 	},
