@@ -103,6 +103,11 @@ MODULE.menu = {
 		},
 		"Wiki",
 		{
+			text = "Read Me",
+			icon = "icon16/information.png",
+			url = "https://github.com/Guthen/guthscpsnav/blob/master/README.md"
+		},
+		{
 			text = "How to create minimaps?",
 			icon = "icon16/map_add.png",
 			url = "https://github.com/Guthen/guthscpsnav/blob/update-to-guthscpbase-remaster/CREATE_MINIMAP.md",
