@@ -1,3 +1,8 @@
+if not guthscp then
+	error( "guthscpsnav - fatal error! https://github.com/Guthen/guthscpbase must be installed on the server!" )
+	return
+end
+
 AddCSLuaFile()
 
 ENT.Base = "guthscpbase"
