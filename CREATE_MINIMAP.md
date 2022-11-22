@@ -13,6 +13,8 @@ so.. how to make a minimap? we could draw it by hand but it would take sooo much
 4. press the `save to data` button
 5. find the generated texture file at `garrysmod/data/guthscp/snav/<map_name>.png`
 
+![image](https://user-images.githubusercontent.com/33220603/203271755-e1dbea21-b6bd-40a6-9e6f-0a6c90672532.png)
+
 ##  image editing
 this is the most boring part: editing the generated minimap to make it look like a S-NAV map
 
