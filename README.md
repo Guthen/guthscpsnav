@@ -31,8 +31,13 @@ This addon is available on the Workshop [here](https://steamcommunity.com/shared
 + `guthscpsnav_forcemap <MAP_NAME>`: *Server*; Force a specific minimap to be use instead of current map's image (see the list above). Default: ""
 
 ## Known Issues
-### "The addon doesn't work!"
+### "The addon doesn't work!/I can't spawn the S-NAV!"
 Be sure to have installed [[SCP] Guthen's Addons Base](https://steamcommunity.com/sharedfiles/filedetails/?id=2139692777) on your server. Verify that you can open the configuration menu with `guthscpbase` in your game console.
+
+### "The model is shown as an error!/The S-NAV entity is bugged or can't be interacted!"
+The default model comes from the [SCP Assets](https://steamcommunity.com/workshop/filedetails/?id=964160040) addon, ensure it is installed both in your client (=game) and the server.
+
+If the problem remains and you are on a beta version (like `x86-64` or `chromium`), try reinstalling it by switching the beta version back and forth. 
 
 ### "Could not connect to map database!"
 This message appears on the **S-NAV Ultimate** when the current map does not have an assigned minimap. 
