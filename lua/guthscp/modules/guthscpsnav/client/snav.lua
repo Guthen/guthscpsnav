@@ -221,7 +221,7 @@ hook.Add( "PlayerButtonDown", "guthscpsnav:toggle_snav", function( ply, button )
 	if not IsFirstTimePredicted() then return end
 	if not ply:GetNWBool( "guthscpsnav:has_snav", false ) then return end
 
-	if button == _G["KEY_" .. guthscp.configs.guthscpsnav.key] then
+	if button == guthscp.configs.guthscpsnav.key then
 		snav_show = not snav_show
 		surface.PlaySound( "guthen_scp/interact/PickItem2.ogg" )
 	end

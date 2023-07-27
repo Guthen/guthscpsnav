@@ -23,10 +23,10 @@ MODULE.menu = {
 				name = "General",
 			},
 			{
-				type = "TextEntry",
+				type = "InputKey",
 				name = "Key",
 				id = "key",
-				default = "M",
+				default = KEY_M,
 				desc = "Key to press to hide and show the S-NAV when it's equipped",
 			},
 			{
@@ -89,12 +89,6 @@ MODULE.menu = {
 			guthscp.config.create_apply_button(),
 			guthscp.config.create_reset_button(),
 		},
-		receive = function( form )
-			guthscp.config.apply( MODULE.id, form, {
-				network = true,
-				save = true,
-			} )
-		end,
 	},
 	--  details
 	details = {
