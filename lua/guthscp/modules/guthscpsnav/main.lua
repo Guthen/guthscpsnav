@@ -9,8 +9,8 @@ local MODULE = {
 		base = "2.0.0",
 	},
 	requires = {
-		["server/"] = guthscp.REALMS.SERVER,
-		["client/"] = guthscp.REALMS.CLIENT,
+		["server.lua"] = guthscp.REALMS.SERVER,
+		["client.lua"] = guthscp.REALMS.CLIENT,
 	},
 }
 
