@@ -28,7 +28,7 @@ MODULE.menu = {
 				desc = "Key to press to hide and show the S-NAV when it's equipped",
 			},
 			{
-				type = "NumWang",
+				type = "Number",
 				name = "Blink Time",
 				id = "blink_time",
 				default = .33,
@@ -37,20 +37,20 @@ MODULE.menu = {
 				min = 0,
 			},
 			{
-				type = "NumWang",
+				type = "Number",
 				name = "Show Distance",
 				id = "hostiles_dist",
 				default = 724,
 				desc = "Maximum distance where hostiles (SCPs & NPCs) will be shown on the S-NAV"
 			},
 			{
-				type = "CheckBox",
+				type = "Bool",
 				name = "Show Positions",
 				id = "show_hostiles_pos",
 				desc = "If checked, hostiles positions (SCPs & NPCs) will be revealed on the S-NAV"
 			},
 			{
-				type = "CheckBox",
+				type = "Bool",
 				name = "Constant Refresh",
 				id = "hostile_constant_refresh",
 				desc = "If checked, hostiles positions and distance will be constantly refreshed, otherwise it will refresh at a constant rate (every time the texts \"blinks\")"
@@ -58,7 +58,7 @@ MODULE.menu = {
 			--  scps
 			"SCPs",
 			{
-				type = "CheckBox",
+				type = "Bool",
 				name = "Enabled",
 				id = "scps_enabled",
 				default = true,
@@ -67,14 +67,14 @@ MODULE.menu = {
 			--  npcs
 			"NPCs",
 			{
-				type = "CheckBox",
+				type = "Bool",
 				name = "Enabled",
 				id = "npcs_enabled",
 				default = false,
 				desc = "If checked, NPCs will be shown on the S-NAV",
 			},
 			{
-				type = "CheckBox",
+				type = "Bool",
 				name = "Hostiles Only",
 				id = "npcs_hostile_only",
 				default = true,
