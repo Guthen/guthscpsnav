@@ -18,10 +18,8 @@ MODULE.menu = {
 	--  config
 	config = {
 		form = {
-			{
-				type = "Category",
-				name = "General",
-			},
+			--  general
+			"General",
 			{
 				type = "InputKey",
 				name = "Key",
@@ -57,10 +55,8 @@ MODULE.menu = {
 				id = "hostile_constant_refresh",
 				desc = "If checked, hostiles positions and distance will be constantly refreshed, otherwise it will refresh at a constant rate (every time the texts \"blinks\")"
 			},
-			{
-				type = "Category",
-				name = "SCPs",
-			},
+			--  scps
+			"SCPs",
 			{
 				type = "CheckBox",
 				name = "Enabled",
@@ -68,10 +64,8 @@ MODULE.menu = {
 				default = true,
 				desc = "If checked, SCPs will be shown on the S-NAV Ultimate",
 			},
-			{
-				type = "Category",
-				name = "NPCs",
-			},
+			--  npcs
+			"NPCs",
 			{
 				type = "CheckBox",
 				name = "Enabled",
