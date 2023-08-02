@@ -47,12 +47,14 @@ MODULE.menu = {
 				type = "Bool",
 				name = "Show Positions",
 				id = "show_hostiles_pos",
+				default = false,
 				desc = "If checked, hostiles positions (SCPs & NPCs) will be revealed on the S-NAV"
 			},
 			{
 				type = "Bool",
 				name = "Constant Refresh",
 				id = "hostile_constant_refresh",
+				default = false,
 				desc = "If checked, hostiles positions and distance will be constantly refreshed, otherwise it will refresh at a constant rate (every time the texts \"blinks\")"
 			},
 			--  scps
