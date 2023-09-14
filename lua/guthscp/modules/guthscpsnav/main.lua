@@ -64,7 +64,7 @@ MODULE.menu = {
 				name = "Enabled",
 				id = "scps_enabled",
 				default = true,
-				desc = "If checked, SCPs will be shown on the S-NAV Ultimate",
+				desc = "If checked, SCPs will be shown on the S-NAV Ultimate. This only show players whose team is in the 'SCP Teams' configuration (see 'Base')",
 			},
 			--  npcs
 			"NPCs",
