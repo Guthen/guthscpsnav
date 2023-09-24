@@ -1,6 +1,6 @@
 # how to generate a minimap?
 ##  setup
-you first need to have installed this addon in Garry's Mod either via [Github](https://github.com/Guthen/guthscpsnav/archive/refs/heads/master.zip) (in the `garrysmod/addons` folder) or with [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2139521265)
+you first need to have installed this addon in Garry's Mod either via [Github](https://github.com/Guthen/guthscpsnav/archive/refs/heads/master.zip) (in the `garrysmod/addons` folder) or with [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3034741785)
 
 you'll then need an image editor such as [Aseprite](https://www.aseprite.org/), [Krita](https://krita.org/), [GIMP](https://www.gimp.org/), [Affinity Photo](https://affinity.serif.com/fr/photo/), [paint.NET](https://www.getpaint.net/)..
 actually, I personally use Aseprite which is for pixel art (since we need to edit raw pixels, it's a nice choice) but I used to use GIMP and it worked well enough, so you can use any software you want. I'll assume you already have basic knowledge about how to use one of them.
