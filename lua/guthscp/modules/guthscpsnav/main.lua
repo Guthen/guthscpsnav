@@ -1,7 +1,7 @@
 local MODULE = {
 	name = "S-NAV Ultimate",
 	author = "Guthen",
-	version = "2.0.0-beta",
+	version = "2.0.1",
 	description = "A portable mini-map capable of showing nearby SCPs & NPCs hostiles!",
 	icon = "icon16/map.png",
 	version_url = "https://raw.githubusercontent.com/Guthen/guthscpsnav/update-to-guthscpbase-remaster/lua/guthscp/modules/guthscpsnav/main.lua",
@@ -130,6 +130,16 @@ MODULE.menu = {
 function MODULE:init()
 	--  porting old config file
 	self:port_old_config_file( "guthscpbase/guthscpsnav.json" )
+
+	--  warn for old version
+	timer.Simple( 0, function()
+		local config_hooks = hook.GetTable()["guthscpbase:config"]
+		if config_hooks and config_hooks["guthscpsnav"] then
+			local text = "The old version of this addon is currently running on this server. Please, delete the '[SCP] S-Nav Ultimate' addon to avoid any possible conflicts."
+			self:add_error( text )
+			self:error( text )
+		end
+	end )
 end
 
 guthscp.module.hot_reload( "guthscpsnav" )
