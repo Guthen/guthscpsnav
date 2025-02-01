@@ -18,7 +18,7 @@ local snav_map_texture = Material( "guthscpsnav/minimaps/" .. game.GetMap() .. "
 local snav_map_w, snav_map_h = snav_map_texture:Width(), snav_map_texture:Height()
 local snav_texture = Material( "guthscpsnav/navigator.png" )
 local snav_w, snav_h = snav_texture:Width(), snav_texture:Height()
-local snav_x, snav_y = ScrW() - snav_w * .95, ScrH() - snav_h * .95
+local snav_x, snav_y = ScrW() - snav_w * 0.95, ScrH() - snav_h * 0.95
 local snav_screen_coords = {
 	start = {
 		x = 83,
@@ -37,7 +37,7 @@ local screen_w, screen_h = snav_screen_coords.endpos.x - snav_screen_coords.star
 --  render info
 local scps_infos = {}
 local color_black, color_scp_ring = Color( 0, 0, 0 ), Color( 115, 31, 28 )
-local ply_next_blink, ply_is_blinking = CurTime() + .5, false
+local ply_next_blink, ply_is_blinking = CurTime() + 0.5, false
 local scp_next_blink, scp_is_blinking = ply_next_blink, ply_is_blinking
 local ply_pos
 local relative_x, relative_y = 0, 0
@@ -327,7 +327,7 @@ concommand.Add( "guthscpsnav_generate", function()
 	--  render map
 	hook.Add( "HUDPaint", "guthscpsnav:generate", function()
 		--  generate
-		local middle_pos = LerpVector( .5, map_start, map_end )
+		local middle_pos = LerpVector( 0.5, map_start, map_end )
 		render.RenderView( {
 			origin = middle_pos + Vector( 0, 0, data.height_offset.value ),
 			angles = Angle( 90, 90, 90 ),
