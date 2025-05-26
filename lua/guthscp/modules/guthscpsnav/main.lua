@@ -1,7 +1,7 @@
 local MODULE = {
 	name = "S-NAV Ultimate",
 	author = "Guthen",
-	version = "2.0.1",
+	version = "2.0.2",
 	description = "A portable mini-map capable of showing nearby SCPs & NPCs hostiles!",
 	icon = "icon16/map.png",
 	version_url = "https://raw.githubusercontent.com/Guthen/guthscpsnav/master/lua/guthscp/modules/guthscpsnav/main.lua",
@@ -82,8 +82,6 @@ MODULE.menu = {
 				default = true,
 				desc = "If checked, only hostile NPCs will be shown. Since it use `IsEnemyEntityName` internally, this may omit custom NPCs",
 			},
-			guthscp.config.create_apply_button(),
-			guthscp.config.create_reset_button(),
 		},
 	},
 	--  details
